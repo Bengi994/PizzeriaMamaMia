@@ -7,7 +7,6 @@ const LoginPage = () => {
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        // Validaciones
         if (!email || !password) {
            alert('All fields are required!');
             return;
