@@ -1,16 +1,18 @@
-import { useState, useEffect } from 'react';
+import { useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 const Pizza = () => {
-  const [pizza, setPizza] = useState([]); 
-  const [loading, setLoading] = useState(true); 
-  const [error, setError] = useState(null); 
+  const { id } = useParams();
+  const [pizza, setPizza] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchPizza = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/pizzas');
+        const response = await fetch(`http://localhost:5000/api/pizzas/${id}`);
         if (!response.ok) {
-          throw new Error('Error al obtener la pizza');
+          throw new Error("Error al obtener la pizza");
         }
         const data = await response.json();
         setPizza(data);
@@ -22,7 +24,7 @@ const Pizza = () => {
     };
 
     fetchPizza();
-  }, []);
+  }, [id]);
 
   if (loading) {
     return <div>Cargando...</div>;
@@ -34,20 +36,22 @@ const Pizza = () => {
 
   return (
     <div className="container mt-5">
-        <div className="d-flex flex-wrap justify-content-center">
-        {pizza.map((pizza) => (
-            <div className="card shadow-sm p-3 mb-5 bg-white rounded" style={{ width: '18rem', margin: '10px' }} key={pizza.id}>
-                <img  className="card-img-top" src={pizza.img} alt={pizza.name} />
-                <div className="card-body text-center">
-                    <h2 className="card-title" >{pizza.name}</h2>
-                    <p className="card-text">Precio: ${pizza.price.toLocaleString()}</p>
-                    <p>Ingredientes: {pizza.ingredients.join(', ')}</p>
-                    <p>{pizza.description}</p>
-                </div>
-                <button>Añadir al carrito</button>
-            </div>
-            ))}
+      <div className="d-flex flex-wrap justify-content-center">
+        <div
+          className="card shadow-sm p-3 mb-5 bg-white rounded"
+          style={{ width: "18rem", margin: "10px" }}
+          key={pizza.id}
+        >
+          <img className="card-img-top" src={pizza.img} alt={pizza.name} />
+          <div className="card-body text-center">
+            <h2 className="card-title">{pizza.name}</h2>
+            <p className="card-text">Precio: ${pizza.price.toLocaleString()}</p>
+            <p>Ingredientes: {pizza.ingredients.join(", ")}</p>
+            <p>{pizza.description}</p>
+          </div>
+          <button>Añadir al carrito</button>
         </div>
+      </div>
     </div>
   );
 };

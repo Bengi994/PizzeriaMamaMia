@@ -1,10 +1,12 @@
 import { useContext } from 'react';
 import CartContext from '../context/CartContext';
+import { Link } from 'react-router-dom';
 
-const CardPizza = ({ name, price, ingredients, img }) => {
+const CardPizza = ({ id, name, price, ingredients, img }) => {
+  console.log("Pizza ID:", id);
 
   const { addItemToCart } = useContext(CartContext);  
-  const pizza = { id: name, name, price, img }; 
+  const pizza = { id, name, price, img };
   return (
     <div className="col-md-4 d-flex align-items-stretch mb-4 mt-4">
       <div className="card" style={{ maxWidth: "400px", margin: "auto" }}>
@@ -25,7 +27,7 @@ const CardPizza = ({ name, price, ingredients, img }) => {
 
           <p className="card-text text-center fs-4 fw-bold">Precio: ${price.toLocaleString()}</p>
           <div className="d-flex justify-content-between mt-4 mx-4">
-            <a href="#" className="btn btn-outline-secondary">Ver Más 👀</a>
+          <Link to={`/pizza/${id}`} className="btn btn-outline-secondary">Ver Más 👀</Link>
             <button 
               onClick={() => addItemToCart(pizza)}  
               className="btn text-white bg-black"
