@@ -1,14 +1,16 @@
-import { useState } from 'react';
+import { useState,useContext  } from 'react';
+import { UserContext } from '../context/UserContext';
 
 const RegisterPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
-    const handleSubmit = (event) => {
+    const { register } = useContext(UserContext);
+
+    const handleSubmit = async (event) => {
         event.preventDefault();
 
-        // Validaciones
         if (!email || !password || !confirmPassword) {
             alert('ll fields are required!');
             return;
@@ -24,7 +26,12 @@ const RegisterPage = () => {
             return;
         }
 
-        alert('Register successfully!');
+        try {
+            await register({ email, password });
+            alert('Register successfully!');
+        } catch (error) {
+            alert('Error during registration: ' + error.message);
+        }
     };
 
     return (

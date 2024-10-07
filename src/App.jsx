@@ -13,7 +13,7 @@ import Profile from './components/Profile';
 
 import { CartProvider } from './context/CartContext'; 
 import { PizzaProvider } from './context/PizzaContext'; 
-import { UserProvider, UserContext } from './context/UserContext'; 
+import { UserProvider } from './context/UserContext'; 
 import ProtectedRoute from './components/ProtectedRoute'; 
 
 

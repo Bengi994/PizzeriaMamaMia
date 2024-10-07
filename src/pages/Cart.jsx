@@ -3,9 +3,46 @@ import CartContext from "../context/CartContext";
 import { UserContext } from "../context/UserContext";
 
 const Cart = () => {
-  const { cartItems, addItemToCart, removeItemFromCart, totalAmount } =
+  const { cartItems, addItemToCart, removeItemFromCart, totalAmount, clearCart  } =
     useContext(CartContext);
   const { token } = useContext(UserContext);
+
+  const handleCheckout = async () => {
+    if (!token) {
+      alert("Necesitas iniciar sesión para proceder con el pago.");
+      return;
+    }
+
+    if (cartItems.length === 0) {
+      alert("El carrito está vacío. No puedes proceder al pago.");
+      return;
+    }
+
+    try {
+      const response = await fetch('http://localhost:5000/api/checkouts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          items: cartItems,  
+          total: totalAmount, 
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Hubo un problema al procesar el pago.');
+      }
+
+      const data = await response.json();
+      alert('Pago realizado con éxito');
+      clearCart();  
+    } catch (error) {
+      console.error("Error en el proceso de checkout:", error);
+      alert('Hubo un error durante el proceso de pago. Inténtalo de nuevo.');
+    }
+  };
 
   return (
     <div className="container mt-5">
@@ -61,7 +98,11 @@ const Cart = () => {
       )}
       <div className="d-flex justify-content-center align-items-center mt-4 p-4 border-top">
         <h3 className="me-3">Total: ${totalAmount.toLocaleString()}</h3>
-        <button className="btn btn-success btn-lg" disabled={!token}>
+        <button
+          className="btn btn-success btn-lg"
+          disabled={!token}
+          onClick={handleCheckout}  
+        >
           {token ? "Pagar" : "Inicia sesión para pagar"}
         </button>
       </div>

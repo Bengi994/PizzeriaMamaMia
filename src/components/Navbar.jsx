@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link,useNavigate  } from "react-router-dom";
 import { useContext } from 'react';
 import CartContext from '../context/CartContext';
 import { UserContext } from '../context/UserContext';
@@ -6,6 +6,14 @@ import { UserContext } from '../context/UserContext';
 const Navbar = () => {
   const { totalAmount } = useContext(CartContext);
   const { token, logout } = useContext(UserContext); 
+
+  const navigate = useNavigate();
+
+  // Función para manejar el cierre de sesión
+  const handleLogout = () => {
+    logout();  // Llamar a la función logout del contexto
+    navigate('/login');  // Redirigir a la página de inicio después de cerrar sesión
+  };
 
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark p-2">
@@ -21,7 +29,7 @@ const Navbar = () => {
               <Link className="nav-link border rounded p-1 m-1" to="/profile"><span role="img" aria-label="Profile">🔓</span> Profile</Link>
             </li>
             <li className="nav-item">
-              <button className="nav-link border rounded p-1 m-1 btn btn-link" onClick={logout}><span role="img" aria-label="Logout">🔒</span> Logout</button>
+              <button className="nav-link border rounded p-1 m-1 btn btn-link" onClick={handleLogout}><span role="img" aria-label="Logout">🔒</span> Logout</button>
             </li>
           </>
         ) : (
